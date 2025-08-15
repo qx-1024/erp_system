@@ -3,6 +3,9 @@ package com.qiu.erp.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qiu.erp.model.dto.UserDTO;
 import com.qiu.erp.model.entity.User;
+import com.qiu.erp.model.vo.UserVO;
+
+import java.util.List;
 
 /**
  * @author HuangHaoBin
@@ -10,5 +13,7 @@ import com.qiu.erp.model.entity.User;
  */
 public interface UserService extends IService<User> {
 
-    boolean add(UserDTO dto);
+    boolean addUser(UserDTO dto);
+
+    List<UserVO> getPage();
 }

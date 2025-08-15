@@ -65,15 +65,6 @@ public class ResponseBody<T> implements Serializable {
     }
 
     /**
-     * 带自定义消息的成功响应（无数据）
-     */
-    public static <T> ResponseBody<T> success(String message) {
-        ResponseBody<T> response = success();
-        response.message = message;
-        return response;
-    }
-
-    /**
      * 带数据的成功响应（默认消息"操作成功"）
      */
     public static <T> ResponseBody<T> success(T data) {

@@ -1,18 +1,30 @@
 package com.qiu.erp.service.impl;
 
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qiu.erp.constants.RoleConstants;
 import com.qiu.erp.exception.EncryptionException;
+import com.qiu.erp.mapper.RoleMapper;
+import com.qiu.erp.mapper.UserRoleMapper;
 import com.qiu.erp.model.dto.UserDTO;
+import com.qiu.erp.model.entity.Role;
 import com.qiu.erp.model.entity.User;
+import com.qiu.erp.model.entity.UserRole;
+import com.qiu.erp.model.vo.UserVO;
 import com.qiu.erp.service.UserService;
 import com.qiu.erp.mapper.UserMapper;
 import com.qiu.erp.utils.EncryptionUtil;
 import com.qiu.erp.utils.SnowflakeIdGenerator;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author HuangHaoBin
@@ -26,11 +38,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private UserMapper userMapper;
 
     @Resource
+    private RoleMapper roleMapper;
+
+    @Resource
+    private UserRoleMapper userRoleMapper;
+
+    @Resource
     private SnowflakeIdGenerator snowflakeIdGenerator;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean add(UserDTO dto) {
+    public boolean addUser(UserDTO dto) {
         User user = new User();
         BeanUtils.copyProperties(dto, user);
 
@@ -59,7 +77,77 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         user.setId(snowflakeIdGenerator.nextId());
 
-        return userMapper.insert(user) > 0;
+        int insertUserRole = 0;
+        UserRole userRole = new UserRole();
+        if (StringUtils.isEmpty(dto.getRoleCode())){
+            userRole.setUserId(user.getId());
+
+            Role role = new LambdaQueryChainWrapper<>(roleMapper)
+                    .eq(Role::getRoleCode, RoleConstants.GENERAL_STAFF)
+                    .one();
+
+            userRole.setRoleId(role.getId());
+
+            insertUserRole = userRoleMapper.insert(userRole);
+        } else {
+            userRole.setUserId(user.getId());
+
+            Role role = new LambdaQueryChainWrapper<>(roleMapper)
+                    .eq(Role::getRoleCode, dto.getRoleCode().toUpperCase())
+                    .one();
+
+            userRole.setRoleId(role.getId());
+
+            insertUserRole = userRoleMapper.insert(userRole);
+        }
+
+        int insertUser = userMapper.insert(user);
+
+        return insertUserRole > 0 && insertUser > 0;
+    }
+
+    @Override
+    public List<UserVO> getPage() {
+        List<User> userList = new LambdaQueryChainWrapper<>(userMapper)
+                .list();
+
+        return userList.stream()
+                .map(user -> {
+                    UserVO vo = new UserVO();
+                    BeanUtils.copyProperties(user, vo);
+
+                    vo.setPassword("*****************");
+                    String phone = user.getPhone();
+                    if (phone != null && phone.length() == 11) {
+                        String maskedPhone = phone.substring(0, 3) + "****" + phone.substring(7);
+                        vo.setPhone(maskedPhone);
+                    } else {
+                        vo.setPhone("未知号码");
+                    }
+
+                    List<UserRole> userRoles = new LambdaQueryChainWrapper<>(userRoleMapper)
+                            .eq(UserRole::getUserId, user.getId())
+                            .list();
+
+                    List<Long> roleIds = userRoles.stream()
+                            .map(UserRole::getRoleId)
+                            .collect(Collectors.toList());
+
+                    if (!roleIds.isEmpty()) {
+                        List<String> roleList = new LambdaQueryChainWrapper<>(roleMapper)
+                                .in(Role::getId, roleIds)
+                                .list()
+                                .stream()
+                                .map(Role::getRoleCode)
+                                .collect((Collectors.toList()));
+                        vo.setRole(roleList);
+                    } else {
+                        vo.setRole(Collections.emptyList());
+                    }
+
+                    return vo;
+                })
+                .collect(Collectors.toList());
     }
 }
 
