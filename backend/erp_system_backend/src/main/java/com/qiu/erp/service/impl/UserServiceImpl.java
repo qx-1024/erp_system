@@ -52,33 +52,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = new User();
         BeanUtils.copyProperties(dto, user);
 
-        // 密码加密
-        try {
-            user.setPassword(EncryptionUtil.encrypt(dto.getPassword()));
-        } catch (EncryptionException e) {
-            // 捕获加密工具类抛出的具体异常
-            log.error("密码加密失败 [错误码: {}]，原因: {}", e.getCode(), e.getMessage(), e);
-
-            // 可根据错误码进行不同处理
-            if (EncryptionException.KEY_INVALID.equals(e.getCode())) {
-                // 密钥无效的特殊处理（如提示管理员检查配置）
-                log.warn("加密密钥配置错误，请联系管理员检查配置文件");
-            } else if (EncryptionException.ENCRYPT_ERROR.equals(e.getCode())) {
-                // 加密过程失败的处理
-                log.error("加密过程失败，请检查加密工具类实现");
-            }
-
+        // 加密密码
+        String encryptedPassword = EncryptionUtil.encrypt(dto.getPassword());
+        if (encryptedPassword == null) {
             return false;
-        } catch (Exception e) {
-            // 捕获其他未预料的异常
-            log.error("密码处理时发生未知异常", e);
-            return false;
+        }
+        user.setPassword(encryptedPassword);
+
+        // 加密手机号（非必填字段，允许为空）
+        if (StringUtils.isNotEmpty(dto.getPhone())) {
+            String encryptedPhone = EncryptionUtil.encrypt(dto.getPhone());
+            user.setPhone(encryptedPhone);
+        }
+
+        // 加密邮箱（非必填字段，允许为空）
+        if (StringUtils.isNotEmpty(dto.getEmail())) {
+            String encryptedEmail = EncryptionUtil.encrypt(dto.getEmail());
+            user.setEmail(encryptedEmail);
         }
 
         user.setId(snowflakeIdGenerator.nextId());
 
         int insertUserRole = 0;
         UserRole userRole = new UserRole();
+        userRole.setId(snowflakeIdGenerator.nextId());
         if (StringUtils.isEmpty(dto.getRoleCode())){
             userRole.setUserId(user.getId());
 
@@ -117,12 +114,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     BeanUtils.copyProperties(user, vo);
 
                     vo.setPassword("*****************");
-                    String phone = user.getPhone();
-                    if (phone != null && phone.length() == 11) {
+
+                    if (user.getPhone() != null ) {
+                        String phone = EncryptionUtil.decrypt(user.getPhone());
                         String maskedPhone = phone.substring(0, 3) + "****" + phone.substring(7);
                         vo.setPhone(maskedPhone);
-                    } else {
-                        vo.setPhone("未知号码");
                     }
 
                     List<UserRole> userRoles = new LambdaQueryChainWrapper<>(userRoleMapper)
@@ -148,6 +144,78 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     return vo;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserVO getUserDetail(String id) {
+        User user = userMapper.selectById(id);
+        if (user == null) {
+            log.info("未查询到该用户=====>{}", id);
+            return null;
+        }
+
+        UserVO vo = new UserVO();
+        BeanUtils.copyProperties(user, vo);
+
+        List<UserRole> userRoles = new LambdaQueryChainWrapper<>(userRoleMapper)
+                .eq(UserRole::getUserId, user.getId())
+                .list();
+
+        List<Long> roleIds = userRoles.stream()
+                .map(UserRole::getRoleId)
+                .collect(Collectors.toList());
+
+        if (!roleIds.isEmpty()) {
+            List<String> roleList = new LambdaQueryChainWrapper<>(roleMapper)
+                    .in(Role::getId, roleIds)
+                    .list()
+                    .stream()
+                    .map(Role::getRoleCode)
+                    .collect((Collectors.toList()));
+            vo.setRole(roleList);
+        } else {
+            vo.setRole(Collections.emptyList());
+        }
+
+        return vo;
+    }
+
+    @Override
+    public UserVO getUserDetailDecrypt(String id) {
+        User user = userMapper.selectById(id);
+        if (user == null) {
+            log.info("未查询到该用户=====>{}", id);
+            return null;
+        }
+
+        UserVO vo = new UserVO();
+        BeanUtils.copyProperties(user, vo);
+
+        vo.setPassword(EncryptionUtil.decrypt(user.getPassword()));
+        vo.setPhone(EncryptionUtil.decrypt(user.getPhone()));
+        vo.setEmail(EncryptionUtil.decrypt(user.getEmail()));
+
+        List<UserRole> userRoles = new LambdaQueryChainWrapper<>(userRoleMapper)
+                .eq(UserRole::getUserId, user.getId())
+                .list();
+
+        List<Long> roleIds = userRoles.stream()
+                .map(UserRole::getRoleId)
+                .collect(Collectors.toList());
+
+        if (!roleIds.isEmpty()) {
+            List<String> roleList = new LambdaQueryChainWrapper<>(roleMapper)
+                    .in(Role::getId, roleIds)
+                    .list()
+                    .stream()
+                    .map(Role::getRoleCode)
+                    .collect((Collectors.toList()));
+            vo.setRole(roleList);
+        } else {
+            vo.setRole(Collections.emptyList());
+        }
+
+        return vo;
     }
 }
 

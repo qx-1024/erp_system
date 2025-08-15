@@ -45,6 +45,32 @@ public class UserController {
     }
 
     /**
+     * 查询用户信息详情【未解密】
+     */
+    @GetMapping("/detail/encrypt/{id}")
+    @Operation(
+            summary = "查询用户信息详情【未解密】",
+            description = "根据用户ID查询用户详细信息，包括用户名、手机号、邮箱、角色信息等"
+            )
+    public ResponseBody<UserVO> getUserDetail(
+            @Parameter(description = "用户ID", required = true) @PathVariable String id) {
+        return ResponseBody.success(userService.getUserDetail(id));
+    }
+
+    /**
+     * 查询用户信息详情【已解密】
+     */
+    @GetMapping("/detail/decrypt/{id}")
+    @Operation(
+            summary = "查询用户信息详情【已解密】",
+            description = "根据用户ID查询用户详细信息，包括用户名、手机号、邮箱、角色信息等，手机号和邮箱"
+            )
+    public ResponseBody<UserVO> getUserDetailDecrypt(
+            @Parameter(description = "用户ID", required = true) @PathVariable String id) {
+        return ResponseBody.success(userService.getUserDetailDecrypt(id));
+    }
+
+    /**
      * 查询用户列表
      */
     @GetMapping("/list")

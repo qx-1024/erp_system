@@ -16,4 +16,9 @@ public interface UserService extends IService<User> {
     boolean addUser(UserDTO dto);
 
     List<UserVO> getPage();
+
+    UserVO getUserDetail(String id);
+
+    UserVO getUserDetailDecrypt(String id);
+
 }
