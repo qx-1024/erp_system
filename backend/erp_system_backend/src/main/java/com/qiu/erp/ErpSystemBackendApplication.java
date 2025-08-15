@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @deprecated 进销存系统
  * @date 2025/08/15 15:50
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.qiu.erp"})
 @MapperScan(basePackages = "com.qiu.erp.mapper")
 public class ErpSystemBackendApplication {
 

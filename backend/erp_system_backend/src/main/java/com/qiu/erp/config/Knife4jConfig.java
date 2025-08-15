@@ -18,7 +18,7 @@ public class Knife4jConfig {
     public GroupedOpenApi pdfApi() {
         return GroupedOpenApi.builder()
                 .group("ERP System")
-                .pathsToMatch("/api/erp/**")
+                .pathsToMatch("/**")
                 .build();
     }
 }

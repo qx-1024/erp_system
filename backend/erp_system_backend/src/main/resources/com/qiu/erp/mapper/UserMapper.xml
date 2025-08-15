@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qiu.erp.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.qiu.erp.model.entity.User">
+            <id property="id" column="id" />
+            <result property="username" column="username" />
+            <result property="password" column="password" />
+            <result property="email" column="email" />
+            <result property="phone" column="phone" />
+            <result property="status" column="status" />
+            <result property="createTime" column="create_time" />
+            <result property="modifiedTime" column="modified_time" />
+            <result property="opCreateId" column="op_create_id" />
+            <result property="opCreateName" column="op_create_name" />
+            <result property="opModifiedId" column="op_modified_id" />
+            <result property="opModifiedName" column="op_modified_name" />
+            <result property="isDel" column="is_del" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,username,password,email,phone,status,
+        create_time,modified_time,op_create_id,op_create_name,op_modified_id,
+        op_modified_name,is_del
+    </sql>
+</mapper>
