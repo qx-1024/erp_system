@@ -1,5 +1,6 @@
 package com.qiu.erp;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2025/08/15 15:50
  */
 @SpringBootApplication
+@MapperScan(basePackages = "com.qiu.erp.mapper")
 public class ErpSystemBackendApplication {
 
     public static void main(String[] args) {

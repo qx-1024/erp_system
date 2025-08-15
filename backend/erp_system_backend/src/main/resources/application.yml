@@ -4,4 +4,31 @@ server:
 spring:
   application:
     name: erp-system
+  datasource:
+    url: jdbc:mysql://localhost:3306/erp_system?useSSL=false&serverTimezone=UTC
+    username: root
+    password: mysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
+# ????
+logging:
+  level:
+    root: INFO
+    com.qiu: DEBUG
+
+springdoc:
+  api-docs:
+    enabled: true  # ?? API ??????
+  swagger-ui:
+    enabled: true  # ???? Swagger UI????
+    path: /swagger-ui.html  # ?? Swagger UI ??
+
+# Knife4j ??
+knife4j:
+  enable: true  # ?? Knife4j
+  setting:
+    language: zh-CN  # ??????? zh-CN/en
+    enableSwaggerModels: true  # ?? Swagger ??
+    enableDocumentManage: true  # ??????
+    enableHost: false  # ???? Host ??
+    enableRequestCache: true  # ????????
