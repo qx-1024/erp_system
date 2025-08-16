@@ -27,7 +27,7 @@
 
             <div class="button-wrapper">
                 <el-form-item>
-                    <el-button :type="isLoginMode ? 'primary' : 'success'" @click="submitForm(ruleFormRef)">{{ isLoginMode ? '登录' : '注册' }}</el-button>
+                    <el-button :type="isLoginMode ? 'primary' : 'success'" @click="submitForm(ruleFormRef)">{{ isLoginMode ? '登 录' : '立即注册' }}</el-button>
                 </el-form-item>
             </div>
         </el-form>
@@ -35,7 +35,7 @@
         <!-- 固定在右下角的链接按钮 -->
         <div class="bottom-links">
             <el-button @click="toggleMode" :type="!isLoginMode ? 'primary' : 'success'" link>
-                    {{ isLoginMode ? '立即注册' : '马上登录' }}
+                    {{ isLoginMode ? '我要注册' : '现在登录' }}
             </el-button>
             <el-button @click="forgotPassword" type="danger" link v-if="isLoginMode">
                 忘记密码
@@ -67,7 +67,10 @@
 <script setup lang="ts">
 import { reactive, ref, computed } from 'vue'
 
+import { post } from '../request/request';
+
 import type { FormInstance, FormRules } from 'element-plus'
+import { ElMessage } from 'element-plus';
 
 interface User {
     username: string
@@ -133,7 +136,26 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         // 这里添加登录逻辑
       } else {
         console.log('注册提交!', User);
-        // 这里添加注册逻辑
+        // 使用封装的post方法发送注册请求
+        post('/user/add', User)
+          .then(data => {
+            // 明确处理data为null的情况
+            console.log('注册成功，返回数据:', data);
+            ElMessage({
+              message: '注册成功注册成功，即将跳转到登录',
+              type: 'success'
+            });
+            isLoginMode.value = true;
+            resetForm(ruleFormRef.value);
+          })
+          .catch(error => {
+            // 错误处理保持不变
+            console.error('注册注册失败，错误详情:', error);
+            ElMessage({
+              message: error.message || '注册失败，请重试',
+              type: 'error'
+            });
+          });
       }
     } else {
       console.log('error submit!', fields);
@@ -240,7 +262,6 @@ const forgotPassword = () => {
 /* 调整按钮样式 */
 .button-wrapper :deep(.el-button) {
   margin: 0 10px;
-  width: 100px;
 }
 
 /* 右下角链接样式 */
