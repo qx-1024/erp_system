@@ -25,22 +25,23 @@
                 <el-input v-model="User.phone" placeholder="请输入你的手机号"/>
             </el-form-item>
 
+            <div class="bottom-links">
+              <el-form-item>
+                <el-button @click="toggleMode" :type="!isLoginMode ? 'primary' : 'success'" link>
+                        {{ isLoginMode ? '我要注册' : '现在登录' }}
+                </el-button>
+                <el-button @click="forgotPassword" type="danger" link v-if="isLoginMode">
+                    忘记密码
+                </el-button>
+              </el-form-item>
+          </div>
+
             <div class="button-wrapper">
                 <el-form-item>
                     <el-button :type="isLoginMode ? 'primary' : 'success'" @click="submitForm(ruleFormRef)">{{ isLoginMode ? '登 录' : '立即注册' }}</el-button>
                 </el-form-item>
             </div>
         </el-form>
-
-        <!-- 固定在右下角的链接按钮 -->
-        <div class="bottom-links">
-            <el-button @click="toggleMode" :type="!isLoginMode ? 'primary' : 'success'" link>
-                    {{ isLoginMode ? '我要注册' : '现在登录' }}
-            </el-button>
-            <el-button @click="forgotPassword" type="danger" link v-if="isLoginMode">
-                忘记密码
-            </el-button>
-        </div>
       </el-card>
     </div>
 
@@ -135,12 +136,10 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         console.log('登录提交!', User.username, User.password);
         // 这里添加登录逻辑
       } else {
-        console.log('注册提交!', User);
         // 使用封装的post方法发送注册请求
         post('/user/add', User)
           .then(data => {
             // 明确处理data为null的情况
-            console.log('注册成功，返回数据:', data);
             ElMessage({
               message: '注册成功注册成功，即将跳转到登录',
               type: 'success'
@@ -240,7 +239,6 @@ const forgotPassword = () => {
 .button-wrapper {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
 }
 
 :deep(.el-card) {
@@ -255,10 +253,6 @@ const forgotPassword = () => {
   justify-content: center;
 }
 
-:deep(.el-form) {
-  margin-bottom: 20px;
-}
-
 /* 调整按钮样式 */
 .button-wrapper :deep(.el-button) {
   margin: 0 10px;
@@ -266,10 +260,10 @@ const forgotPassword = () => {
 
 /* 右下角链接样式 */
 .bottom-links {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
+  position: relative; /* 修改为相对定位 */
+  margin-top: 15px; /* 增加上边距 */
   display: flex;
+  justify-content: flex-end; /* 右对齐 */
   gap: 15px;
 }
 
