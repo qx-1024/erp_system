@@ -6,29 +6,48 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.4</version>
-        <relativePath/>
+        <groupId>com.qiu</groupId>
+        <artifactId>rep_system</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <groupId>com.qiu</groupId>
-    <artifactId>rep_system</artifactId>
+    <artifactId>user-client</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>erp_system_backend</name>
-    <description>erp_system_backend</description>
-    <packaging>pom</packaging>
+    <name>user-client</name>
+    <description>user-client</description>
 
-    <modules>
-        <module>user-client</module>
-        <module>user-server</module>
-    </modules>
 
-    <properties>
-        <java.version>21</java.version>
 
-        <mybatis-plus.version>3.5.7</mybatis-plus.version>
-    </properties>
+    <dependencies>
+        <!-- MyBatis Plus -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+
+        <!-- knife4j -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>4.5.0</version>
+        </dependency>
+
+        <!-- Springdoc OpenAPI UI -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>

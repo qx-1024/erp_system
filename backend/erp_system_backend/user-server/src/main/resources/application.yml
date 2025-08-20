@@ -1,0 +1,42 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: erp-system
+  datasource:
+    url: jdbc:mysql://localhost:3306/erp_system?useSSL=false&serverTimezone=UTC
+    username: root
+    password: mysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+logging:
+  level:
+    root: INFO
+    com.qiu: DEBUG
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  packages-to-scan: com.qiu.erp.controller
+
+
+knife4j:
+  enable: true
+  setting:
+    language: zh-CN
+    enableSwaggerModels: true
+    enableDocumentManage: true
+    enableHost: false
+    enableRequestCache: true
+
+
+snowflake:
+  worker-id: 1
+
+
+encryption:
+  secret-key: "K9$pL2xQ7mR4sT8b"

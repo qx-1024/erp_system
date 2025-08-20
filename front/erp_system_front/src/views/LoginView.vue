@@ -138,8 +138,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       } else {
         // 使用封装的post方法发送注册请求
         post('/user/add', User)
-          .then(data => {
-            // 明确处理data为null的情况
+          .then(() => {
             ElMessage({
               message: '注册成功注册成功，即将跳转到登录',
               type: 'success'
