@@ -1,5 +1,7 @@
 package com.qiu.user.server.service.impl;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiu.user.client.constants.RoleConstants;
@@ -215,6 +217,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         return vo;
+    }
+
+    @Override
+    public String login(String username, String password) {
+        User user = new LambdaQueryChainWrapper<>(userMapper)
+                .eq(User::getUsername, username)
+                .one();
+
+        String encryptPassword = EncryptionUtil.encrypt(password);
+        if (!encryptPassword.equals(user.getPassword())) {
+            log.info("密码错误======>userid：{}，登录密码：{}", user.getId(), password);
+            throw new RuntimeException("密码错误");
+        }
+
+        Long userId = user.getId();
+        StpUtil.login(userId);
+
+        SaTokenInfo token = StpUtil.getTokenInfo();
+        log.info("用户登录成功=====>{}", token.getTokenValue());
+
+        return token.getTokenValue();
     }
 }
 

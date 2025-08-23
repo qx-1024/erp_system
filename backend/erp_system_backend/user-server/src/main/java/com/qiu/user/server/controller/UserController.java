@@ -1,5 +1,7 @@
 package com.qiu.user.server.controller;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import com.qiu.user.client.model.dto.UserDTO;
 import com.qiu.user.client.model.result.ResponseBody;
 import com.qiu.user.client.model.vo.UserVO;
@@ -9,6 +11,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -79,5 +82,17 @@ public class UserController {
         return ResponseBody.success(userService.getPage());
     }
 
+    /**
+     * 登录
+     */
+    @PostMapping("/login")
+    @Operation(summary = "登录", description = "用户登录，返回token")
+    public ResponseBody<?> login(
+            @Parameter(description = "用户名", required = true) @RequestParam String username,
+            @Parameter(description = "密码", required = true) @RequestParam String password
+    ) {
+        String token = userService.login(username, password);
+        return StringUtils.isNotBlank(token) ? ResponseBody.success(token) : ResponseBody.failed("登录失败");
+    }
 
 }

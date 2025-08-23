@@ -21,4 +21,6 @@ public interface UserService extends IService<User> {
 
     UserVO getUserDetailDecrypt(String id);
 
+    String login(String username, String password);
+
 }
