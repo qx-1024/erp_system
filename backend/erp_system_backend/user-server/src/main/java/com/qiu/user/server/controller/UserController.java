@@ -109,6 +109,32 @@ public class UserController {
         return ResponseBody.success();
     }
 
+    /**
+     * 手动封号
+     */
+    @GetMapping("/disable/{id}/{duration}")
+    @Operation(summary = "手动封号", description = "根据用户ID手动封号，封号后用户不可用")
+    public ResponseBody<?> disableUser(
+            @Parameter(description = "用户ID", required = true)
+            @PathVariable String id,
 
+            @Parameter(description = "封号时长（单位：秒）")
+            @PathVariable Integer duration
+    ) {
+        return userService.disableUser(id, duration) ? ResponseBody.success() : ResponseBody.failed();
+    }
+
+
+    /**
+     * 手动解封
+     */
+    @GetMapping("/enable/{id}")
+    @Operation(summary = "手动解封", description = "根据用户ID手动解封，解封后用户可正常使用")
+    public ResponseBody<?> enableUser(
+            @Parameter(description = "用户ID", required = true)
+            @PathVariable String id
+    ) {
+        return userService.enableUser(id) ? ResponseBody.success() : ResponseBody.failed();
+    }
 
 }

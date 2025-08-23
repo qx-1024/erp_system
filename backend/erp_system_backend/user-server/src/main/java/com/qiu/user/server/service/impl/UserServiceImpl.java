@@ -255,6 +255,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         return token.getTokenValue();
     }
+
+    @Override
+    public boolean disableUser(String id, Integer duration) {
+        // 强制下线
+        StpUtil.kickout(id);
+
+        // 封禁用户
+        StpUtil.disable(id, duration);
+
+        log.info("封禁用户成功=====>用户ID：{},时长:{}秒", id,duration);
+        return true;
+    }
+
+    @Override
+    public boolean enableUser(String id) {
+        StpUtil.untieDisable(id);
+        log.info("解封用户成功=====>用户ID：{}", id);
+        return true;
+    }
 }
 
 
