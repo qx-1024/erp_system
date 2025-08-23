@@ -3,7 +3,11 @@ server:
 
 spring:
   application:
-    name: erp-system
+    name: user-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
   datasource:
     url: jdbc:mysql://localhost:3306/erp_system?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
     username: root

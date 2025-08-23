@@ -19,6 +19,12 @@
     <dependencies>
         <dependency>
             <groupId>com.qiu</groupId>
+            <artifactId>common-server</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.qiu</groupId>
             <artifactId>user-client</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <exclusions>
@@ -44,6 +50,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>${nacos.version}</version>
         </dependency>
 
         <!-- Sa-Token 权限认证 -->

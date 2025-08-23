@@ -11,34 +11,44 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>user-client</artifactId>
+    <artifactId>gateway-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>user-client</name>
-    <description>user-client</description>
+    <name>gateway-server</name>
+    <description>gateway-server</description>
+
+    <properties>
+        <java.version>21</java.version>
+    </properties>
 
     <dependencies>
-        <!-- MyBatis Plus -->
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-            <version>${mybatis-plus.version}</version>
+            <groupId>com.qiu</groupId>
+            <artifactId>common-server</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- knife4j -->
         <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-            <version>4.5.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
-        <!-- Springdoc OpenAPI UI -->
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.2.0</version>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>${nacos.version}</version>
         </dependency>
 
-        <!-- lombok -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+
+        <!-- gateway -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

@@ -251,10 +251,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         StpUtil.login(userId);
 
-        SaTokenInfo token = StpUtil.getTokenInfo();
-        log.info("用户登录成功=====>{}", token.getTokenValue());
+        log.info("用户登录成功=====>{}", StpUtil.getTokenValue());
 
-        return token.getTokenValue();
+        return StpUtil.getTokenValue();
     }
 
     @Override
