@@ -21,8 +21,8 @@ public class OpenAPIConfig {
     public OpenAPI customOpenApi() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("ERP System API Doc")
-                        .description("ERP System")
+                        .title("ERP 系统")
+                        .description("ERP 系统")
                         .version("1.0.0")
                         .license(new License()
                                 .name("MIT License")

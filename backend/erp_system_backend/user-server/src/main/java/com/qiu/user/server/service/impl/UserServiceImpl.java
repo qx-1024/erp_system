@@ -1,5 +1,6 @@
 package com.qiu.user.server.service.impl;
 
+import cn.dev33.satoken.exception.DisableServiceException;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
@@ -224,6 +225,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = new LambdaQueryChainWrapper<>(userMapper)
                 .eq(User::getUsername, username)
                 .one();
+        Long userId = user.getId();
+
+        // 校验指定账号是否已被封禁（临时不可用，封禁时间过了就可用了）
+        try {
+            StpUtil.checkDisable(userId);
+        } catch (DisableServiceException e){
+            log.info("该用户已被封禁=====>{},封禁时长：{}", username, StpUtil.getDisableTime(userId));
+            throw new RuntimeException("该用户已被封禁");
+        }
+
+        // 校验指定账号是否已被禁用（永久不可用）
+        if (user.getStatus() == 1){
+            log.info("该用户已被禁用=====>{}", username);
+            throw new RuntimeException("该用户已被禁用");
+        }
 
         String encryptPassword = EncryptionUtil.encrypt(password);
         if (!encryptPassword.equals(user.getPassword())) {
@@ -231,7 +247,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new RuntimeException("密码错误");
         }
 
-        Long userId = user.getId();
+
         StpUtil.login(userId);
 
         SaTokenInfo token = StpUtil.getTokenInfo();

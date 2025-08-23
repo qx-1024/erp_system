@@ -88,11 +88,27 @@ public class UserController {
     @PostMapping("/login")
     @Operation(summary = "登录", description = "用户登录，返回token")
     public ResponseBody<?> login(
-            @Parameter(description = "用户名", required = true) @RequestParam String username,
-            @Parameter(description = "密码", required = true) @RequestParam String password
+            @Parameter(description = "用户名", required = true)
+            @RequestParam String username,
+
+            @Parameter(description = "密码", required = true)
+            @Schema(type = "string", format = "password")
+            @RequestParam(name = "password") String password
     ) {
         String token = userService.login(username, password);
         return StringUtils.isNotBlank(token) ? ResponseBody.success(token) : ResponseBody.failed("登录失败");
     }
+
+    /**
+     * 登出
+     */
+    @GetMapping("/logout")
+    @Operation(summary = "登出", description = "用户登出，销毁token")
+    public ResponseBody<?> logout() {
+        StpUtil.logout();
+        return ResponseBody.success();
+    }
+
+
 
 }
