@@ -6,6 +6,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiu.user.client.constants.RoleConstants;
+import com.qiu.user.client.model.enums.UserStatusEnum;
 import com.qiu.user.server.mapper.RoleMapper;
 import com.qiu.user.server.mapper.UserRoleMapper;
 import com.qiu.user.client.model.dto.UserDTO;
@@ -236,7 +237,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         // 校验指定账号是否已被禁用（永久不可用）
-        if (user.getStatus() == 1){
+        if (user.getStatus().equals(UserStatusEnum.DISABLED.getCode())){
             log.info("该用户已被禁用=====>{}", username);
             throw new RuntimeException("该用户已被禁用");
         }
@@ -254,6 +255,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         log.info("用户登录成功=====>{}", token.getTokenValue());
 
         return token.getTokenValue();
+    }
+
+    @Override
+    public boolean changeUserStatus(String id, Integer status) {
+        User user = userMapper.selectById(id);
+
+        if (user == null){
+            log.info("该用户不存在，userid =====> {}", id);
+            return false;
+        }
+
+        user.setStatus(status);
+
+        return userMapper.updateById(user) > 0;
     }
 
     @Override

@@ -23,6 +23,8 @@ public interface UserService extends IService<User> {
 
     String login(String username, String password);
 
+    boolean changeUserStatus(String id, Integer status);
+
     boolean disableUser(String id, Integer duration);
 
     boolean enableUser(String id);

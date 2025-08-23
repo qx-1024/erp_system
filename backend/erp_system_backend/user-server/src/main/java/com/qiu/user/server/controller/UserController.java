@@ -3,6 +3,7 @@ package com.qiu.user.server.controller;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.qiu.user.client.model.dto.UserDTO;
+import com.qiu.user.client.model.enums.UserStatusEnum;
 import com.qiu.user.client.model.result.ResponseBody;
 import com.qiu.user.client.model.vo.UserVO;
 import com.qiu.user.server.service.UserService;
@@ -110,10 +111,34 @@ public class UserController {
     }
 
     /**
+     * 永久禁用账号（永久封禁）
+     */
+    @PostMapping("/disable/{id}")
+    @Operation(summary = "禁用账号（永久封禁）", description = "根据用户ID禁用账号，禁用后用户不可用")
+    public ResponseBody<?> disableUserForever(
+            @Parameter(description = "用户ID", required = true)
+            @PathVariable String id
+    ) {
+        return userService.changeUserStatus(id, UserStatusEnum.DISABLED.getCode()) ? ResponseBody.success() : ResponseBody.failed();
+    }
+
+    /**
+     * 解除账号禁用
+     */
+    @PostMapping("/enable/{id}")
+    @Operation(summary = "解除账号禁用", description = "根据用户ID解除账号禁用，解除后用户可正常使用")
+    public ResponseBody<?> enableUserForever(
+            @Parameter(description = "用户ID", required = true)
+            @PathVariable String id
+    ) {
+        return userService.changeUserStatus(id, UserStatusEnum.NORMAL.getCode()) ? ResponseBody.success() : ResponseBody.failed();
+    }
+
+    /**
      * 手动封号
      */
-    @GetMapping("/disable/{id}/{duration}")
-    @Operation(summary = "手动封号", description = "根据用户ID手动封号，封号后用户不可用")
+    @PostMapping("/ban/{id}/{duration}")
+    @Operation(summary = "手动封号", description = "根据用户ID封号（短时间），封号后用户不可用")
     public ResponseBody<?> disableUser(
             @Parameter(description = "用户ID", required = true)
             @PathVariable String id,
@@ -128,8 +153,8 @@ public class UserController {
     /**
      * 手动解封
      */
-    @GetMapping("/enable/{id}")
-    @Operation(summary = "手动解封", description = "根据用户ID手动解封，解封后用户可正常使用")
+    @PostMapping("/unban/{id}")
+    @Operation(summary = "手动解封", description = "根据用户ID解封（短时间封号的情况），解封后用户可正常使用")
     public ResponseBody<?> enableUser(
             @Parameter(description = "用户ID", required = true)
             @PathVariable String id
