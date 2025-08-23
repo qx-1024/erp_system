@@ -20,6 +20,8 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>common-server</module>
+
         <module>user-client</module>
         <module>user-server</module>
         <module>gateway-server</module>
