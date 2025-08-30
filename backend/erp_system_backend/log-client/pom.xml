@@ -11,10 +11,10 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>user-client</artifactId>
+    <artifactId>log-client</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>user-client</name>
-    <description>user-client</description>
+    <name>log-client</name>
+    <description>log-client</description>
 
     <dependencies>
         <dependency>

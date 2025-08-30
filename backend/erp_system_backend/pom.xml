@@ -24,6 +24,9 @@
 
         <module>user-client</module>
         <module>user-server</module>
+        <module>log-client</module>
+        <module>log-server</module>
+
         <module>gateway-server</module>
     </modules>
 

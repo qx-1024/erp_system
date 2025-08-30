@@ -1,10 +1,9 @@
 package com.qiu.user.server.controller;
 
-import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import com.qiu.common.server.model.result.ResponseBody;
 import com.qiu.user.client.model.dto.UserDTO;
 import com.qiu.user.client.model.enums.UserStatusEnum;
-import com.qiu.user.client.model.result.ResponseBody;
 import com.qiu.user.client.model.vo.UserVO;
 import com.qiu.user.server.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

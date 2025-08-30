@@ -1,6 +1,6 @@
 package com.qiu.user.server.controller;
 
-import com.qiu.user.client.model.result.ResponseBody;
+import com.qiu.common.server.model.result.ResponseBody;
 import com.qiu.user.server.service.RoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

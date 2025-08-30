@@ -1,6 +1,5 @@
-package com.qiu.user.client.model.result;
+package com.qiu.common.server.model.result;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serial;
@@ -13,7 +12,6 @@ import java.util.Map;
  * @date 2025-08-15, 星期五 下午 04:41
  */
 @Data
-@Schema(description = "响应结果")
 public class ResponseBody<T> implements Serializable {
 
     @Serial
@@ -22,31 +20,26 @@ public class ResponseBody<T> implements Serializable {
     /**
      * 响应编码
      */
-    @Schema(description = "响应编码:200-请求处理成功")
     private int code = 200;
     /**
      * 提示消息
      */
-    @Schema(description = "提示消息")
     private String message;
 
     /**
      * 响应数据
      */
-    @Schema(description = "响应数据")
     private T data;
 
 
     /**
      * 附加数据
      */
-    @Schema(description = "附加数据")
     private Map<String, Object> extra;
 
     /**
      * 响应时间
      */
-    @Schema(description = "响应时间")
     private long timestamp;
 
     // 构造方法私有化，通过静态方法创建实例
