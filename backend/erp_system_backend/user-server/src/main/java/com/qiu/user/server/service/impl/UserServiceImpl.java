@@ -17,7 +17,7 @@ import com.qiu.user.client.model.vo.UserVO;
 import com.qiu.user.server.service.UserService;
 import com.qiu.user.server.mapper.UserMapper;
 import com.qiu.user.server.utils.EncryptionUtil;
-import com.qiu.user.server.utils.SnowflakeIdGenerator;
+import com.qiu.common.server.utils.SnowflakeIdGenerator;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService{
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Resource
     private UserMapper userMapper;
@@ -79,7 +79,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         int insertUserRole = 0;
         UserRole userRole = new UserRole();
         userRole.setId(snowflakeIdGenerator.nextId());
-        if (StringUtils.isEmpty(dto.getRoleCode())){
+        if (StringUtils.isEmpty(dto.getRoleCode())) {
             userRole.setUserId(user.getId());
 
             Role role = new LambdaQueryChainWrapper<>(roleMapper)
@@ -118,7 +118,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
                     vo.setPassword("*****************");
 
-                    if (user.getPhone() != null ) {
+                    if (user.getPhone() != null) {
                         String phone = EncryptionUtil.decrypt(user.getPhone());
                         String maskedPhone = phone.substring(0, 3) + "****" + phone.substring(7);
                         vo.setPhone(maskedPhone);
@@ -231,13 +231,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 校验指定账号是否已被封禁（临时不可用，封禁时间过了就可用了）
         try {
             StpUtil.checkDisable(userId);
-        } catch (DisableServiceException e){
+        } catch (DisableServiceException e) {
             log.info("该用户已被封禁=====>{},封禁时长：{}", username, StpUtil.getDisableTime(userId));
             throw new RuntimeException("该用户已被封禁");
         }
 
         // 校验指定账号是否已被禁用（永久不可用）
-        if (user.getStatus().equals(UserStatusEnum.DISABLED.getCode())){
+        if (user.getStatus().equals(UserStatusEnum.DISABLED.getCode())) {
             log.info("该用户已被禁用=====>{}", username);
             throw new RuntimeException("该用户已被禁用");
         }
@@ -247,7 +247,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             log.info("密码错误======>userid：{}，登录密码：{}", user.getId(), password);
             throw new RuntimeException("密码错误");
         }
-
 
         StpUtil.login(userId);
 
@@ -260,7 +259,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public boolean changeUserStatus(String id, Integer status) {
         User user = userMapper.selectById(id);
 
-        if (user == null){
+        if (user == null) {
             log.info("该用户不存在，userid =====> {}", id);
             return false;
         }
@@ -278,7 +277,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 封禁用户
         StpUtil.disable(id, duration);
 
-        log.info("封禁用户成功=====>用户ID：{},时长:{}秒", id,duration);
+        log.info("封禁用户成功=====>用户ID：{},时长:{}秒", id, duration);
         return true;
     }
 
@@ -289,7 +288,3 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return true;
     }
 }
-
-
-
-

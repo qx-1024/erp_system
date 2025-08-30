@@ -4,18 +4,18 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiu.user.client.model.entity.Role;
 import com.qiu.user.server.service.RoleService;
 import com.qiu.user.server.mapper.RoleMapper;
-import com.qiu.user.server.utils.SnowflakeIdGenerator;
+import com.qiu.common.server.utils.SnowflakeIdGenerator;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
-* @author Qiu
-* @createDate 2025-08-15 18:58:12
-*/
+ * @author Qiu
+ * @createDate 2025-08-15 18:58:12
+ */
 @Slf4j
 @Service
-public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService{
+public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
     @Resource
     private RoleMapper roleMapper;
@@ -35,7 +35,3 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         return roleMapper.insert(role) > 0;
     }
 }
-
-
-
-

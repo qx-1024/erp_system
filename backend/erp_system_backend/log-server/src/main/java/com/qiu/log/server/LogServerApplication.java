@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @EnableDiscoveryClient
-@SpringBootApplication(scanBasePackages = {"com.qiu.log"})
+@SpringBootApplication(scanBasePackages = {"com.qiu"})
 @MapperScan(basePackages = "com.qiu.log.server.mapper")
 public class LogServerApplication {
 

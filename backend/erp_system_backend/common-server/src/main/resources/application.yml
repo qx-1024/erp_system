@@ -1,3 +1,6 @@
 spring:
   application:
     name: common-server
+
+snowflake:
+  worker-id: 1

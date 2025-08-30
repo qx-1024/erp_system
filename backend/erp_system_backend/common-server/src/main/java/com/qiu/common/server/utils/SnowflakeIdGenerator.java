@@ -1,4 +1,4 @@
-package com.qiu.user.server.utils;
+package com.qiu.common.server.utils;
 
 import org.springframework.stereotype.Component;
 
@@ -7,9 +7,10 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author HuangHaoBin
  * @date 2025-08-15, 星期五 下午 05:13
- * 雪花算法工具类（生成64位纯数字唯一ID）
- * 结构：0（符号位） + 41位时间戳 + 10位机器ID + 12位序列号
+ *       雪花算法工具类（生成64位纯数字唯一ID）
+ *       结构：0（符号位） + 41位时间戳 + 10位机器ID + 12位序列号
  */
+@Component
 public class SnowflakeIdGenerator {
 
     // 起始时间戳（2025-08-15 00:00:00）
@@ -38,7 +39,8 @@ public class SnowflakeIdGenerator {
     private long lastTimestamp = -1L;
 
     // 无参构造（供Spring实例化）
-    public SnowflakeIdGenerator() {}
+    public SnowflakeIdGenerator() {
+    }
 
     // 设置机器ID（由Spring配置类调用）
     public void setWorkerId(long workerId) {

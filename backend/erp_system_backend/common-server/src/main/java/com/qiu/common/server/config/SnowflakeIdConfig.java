@@ -1,6 +1,6 @@
-package com.qiu.user.server.config;
+package com.qiu.common.server.config;
 
-import com.qiu.user.server.utils.SnowflakeIdGenerator;
+import com.qiu.common.server.utils.SnowflakeIdGenerator;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author HuangHaoBin
  * @date 2025-08-15, 星期五 下午 05:25
- * 雪花算法配置类（从配置文件读取机器ID）
+ *       雪花算法配置类（从配置文件读取机器ID）
  */
 @Configuration
 @EnableConfigurationProperties(SnowflakeProperties.class)

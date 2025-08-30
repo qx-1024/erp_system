@@ -55,11 +55,6 @@ public class OperationLog implements Serializable {
     private String operationIp;
 
     /**
-     * 操作时间
-     */
-    private Date operationTime;
-
-    /**
      * 操作设备信息
      */
     private String deviceInfo;

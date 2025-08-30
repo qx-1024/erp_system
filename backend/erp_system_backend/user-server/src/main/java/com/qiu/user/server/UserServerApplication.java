@@ -9,7 +9,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @author Qiu
  */
 @EnableDiscoveryClient
-@SpringBootApplication(scanBasePackages = {"com.qiu.user"})
+@SpringBootApplication(scanBasePackages = {"com.qiu"})
 @MapperScan(basePackages = "com.qiu.user.server.mapper")
 public class UserServerApplication {
 

@@ -11,7 +11,6 @@
             <result property="operationType" column="operation_type" />
             <result property="operationContent" column="operation_content" />
             <result property="operationIp" column="operation_ip" />
-            <result property="operationTime" column="operation_time" />
             <result property="deviceInfo" column="device_info" />
             <result property="operationDuration" column="operation_duration" />
             <result property="requestMethod" column="request_method" />
@@ -29,7 +28,7 @@
 
     <sql id="Base_Column_List">
         id,user_id,user_name,operation_type,operation_content,operation_ip,
-        operation_time,device_info,operation_duration,request_method,request_path,
+        device_info,operation_duration,request_method,request_path,
         operation_status,error_info,create_time,modified_time,
         op_create_id,op_create_name,op_modified_id,op_modified_name,is_del
     </sql>
